@@ -11,11 +11,9 @@ const appName = import.meta.env.VITE_APP_NAME
 
 createInertiaApp({
   title: (title) => (title ? `${title} - ${appName}` : appName),
-  resolve: (name) => {
-    const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', {
-      eager: true,
-    })
-    let page = pages[`./pages/${name}.vue`]
+  resolve: async (name) => {
+    const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue')
+    let page = await pages[`./pages/${name}.vue`]()
     page.default.layout = name.startsWith('auth/') ? Guest : Default
     return page
   },
